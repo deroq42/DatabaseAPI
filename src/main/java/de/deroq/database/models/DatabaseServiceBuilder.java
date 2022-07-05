@@ -1,6 +1,9 @@
 package de.deroq.database.models;
 
+import de.deroq.database.services.cassandra.CassandraDatabaseService;
 import de.deroq.database.services.mongo.MongoDatabaseService;
+
+import java.util.List;
 
 public class DatabaseServiceBuilder {
 
@@ -9,6 +12,8 @@ public class DatabaseServiceBuilder {
     public DatabaseServiceBuilder(DatabaseServiceType databaseServiceType) {
         if(databaseServiceType == DatabaseServiceType.MONGO) {
             this.databaseService = new MongoDatabaseService();
+        }else if(databaseServiceType == DatabaseServiceType.CASSANDRA) {
+            this.databaseService = new CassandraDatabaseService();
         } else {
             //Default / Fallback database.
             this.databaseService = new MongoDatabaseService();
@@ -37,6 +42,16 @@ public class DatabaseServiceBuilder {
 
     public DatabaseServiceBuilder setPort(int port) {
         databaseService.setPort(port);
+        return this;
+    }
+
+    public DatabaseServiceBuilder setKeySpace(String keySpace) {
+        databaseService.setKeySpace(keySpace);
+        return this;
+    }
+
+    public DatabaseServiceBuilder setMappers(List<Class<?>> mappers) {
+        databaseService.setMappers(mappers);
         return this;
     }
 

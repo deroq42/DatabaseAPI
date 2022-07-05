@@ -1,10 +1,16 @@
 package de.deroq.database.models;
 
+import java.util.List;
+
 public abstract class DatabaseService {
 
     protected final DatabaseServiceType databaseServiceType;
     protected String host, username, database, password;
     protected int port;
+
+    /* ONLY FOR CASSANDRA */
+    protected String keySpace;
+    protected List<Class<?>> mappers;
 
     public DatabaseService(DatabaseServiceType databaseServiceType, String host, String username, String database, String password, int port) {
         this.databaseServiceType = databaseServiceType;
@@ -15,13 +21,24 @@ public abstract class DatabaseService {
         this.port = port;
     }
 
-    public abstract void connect();
-
-    public abstract void disconnect();
+    public DatabaseService(DatabaseServiceType databaseServiceType, String host, String username, String database, String password, int port, String keySpace, List<Class<?>> mappers) {
+        this.databaseServiceType = databaseServiceType;
+        this.host = host;
+        this.username = username;
+        this.database = database;
+        this.password = password;
+        this.port = port;
+        this.keySpace = keySpace;
+        this.mappers = mappers;
+    }
 
     public DatabaseService(DatabaseServiceType databaseServiceType) {
         this.databaseServiceType = databaseServiceType;
     }
+
+    public abstract void connect();
+
+    public abstract void disconnect();
 
     public DatabaseServiceType getDatabaseServiceType() {
         return databaseServiceType;
@@ -65,5 +82,21 @@ public abstract class DatabaseService {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public String getKeySpace() {
+        return keySpace;
+    }
+
+    public void setKeySpace(String keySpace) {
+        this.keySpace = keySpace;
+    }
+
+    public List<Class<?>> getMappers() {
+        return mappers;
+    }
+
+    public void setMappers(List<Class<?>> mappers) {
+        this.mappers = mappers;
     }
 }

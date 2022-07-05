@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import de.deroq.database.models.DatabaseService;
 import de.deroq.database.models.DatabaseServiceType;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -15,13 +16,13 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class MongoDatabaseService extends DatabaseService {
 
-    private final MongoDatabaseServiceMethods mongoDatabaseServiceMethods;
-    private MongoClient mongoClient;
-    private com.mongodb.client.MongoDatabase mongoDatabase;
+    public final MongoDatabaseServiceMethods databaseServiceMethods;
+    protected MongoClient mongoClient;
+    protected MongoDatabase mongoDatabase;
 
     public MongoDatabaseService() {
         super(DatabaseServiceType.MONGO);
-        this.mongoDatabaseServiceMethods = new MongoDatabaseServiceMethods();
+        this.databaseServiceMethods = new MongoDatabaseServiceMethods();
     }
 
     @Override
@@ -49,15 +50,15 @@ public class MongoDatabaseService extends DatabaseService {
         return mongoDatabase.getCollection(name, clazz);
     }
 
-    public MongoClient getMongoClient() {
+    public MongoDatabaseServiceMethods getDatabaseServiceMethods() {
+        return databaseServiceMethods;
+    }
+
+    protected MongoClient getMongoClient() {
         return mongoClient;
     }
 
-    public com.mongodb.client.MongoDatabase getMongoDatabase() {
+    protected com.mongodb.client.MongoDatabase getMongoDatabase() {
         return mongoDatabase;
-    }
-
-    public MongoDatabaseServiceMethods getMongoDatabaseServiceMethods() {
-        return mongoDatabaseServiceMethods;
     }
 }
