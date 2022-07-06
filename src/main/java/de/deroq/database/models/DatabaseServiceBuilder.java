@@ -15,7 +15,7 @@ public class DatabaseServiceBuilder {
         }else if(databaseServiceType == DatabaseServiceType.CASSANDRA) {
             this.databaseService = new CassandraDatabaseService();
         } else {
-            //Default / Fallback database.
+            //Fallback database.
             this.databaseService = new MongoDatabaseService();
         }
     }

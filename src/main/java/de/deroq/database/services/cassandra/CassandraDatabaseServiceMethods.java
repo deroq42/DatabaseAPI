@@ -8,28 +8,58 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
 
     protected final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
-    public void createTable(String keyspace, String name, String values) {
-        CompletableFuture.runAsync(() -> session.executeAsync("CREATE TABLE IF NOT EXISTS " + keyspace + "." + name + "(" + values + ");"), EXECUTOR_SERVICE);
+    /**
+     * Creates a table in the database asynchronously.
+     *
+     * @param keyspace The keyspace of the table.
+     * @param name The name of the table.
+     * @param columns The columns of the table to insert entities.
+     */
+    public void createTable(String keyspace, String name, String columns) {
+        CompletableFuture.runAsync(() -> session.executeAsync("CREATE TABLE IF NOT EXISTS " + keyspace + "." + name + "(" + columns + ");"), EXECUTOR_SERVICE);
     }
 
-    public <T> CompletableFuture<Boolean> onInsert(T entity, Class<T> aClass) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+    /**
+     * Inserts an entity into the database asynchronously.
+     *
+     * @param entity The entity we want to insert into the database.
+     * @param aClass The class of the entity.
+     * @param <T> The specified type of the entity.
+     */
+    public <T> void onInsert(T entity, Class<T> aClass) {
         CompletableFuture.runAsync(() -> getMapper(aClass).save(entity), EXECUTOR_SERVICE);
-        return future;
     }
 
-    public <T> CompletableFuture<Boolean> onDelete(T entity, Class<T> aClass) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+    /**
+     * Deletes an entity from the database asynchronously.
+     *
+     * @param entity The entity we want to delete from the database.
+     * @param aClass The class of the entity.
+     * @param <T> The specified type of the entity.
+     */
+    public <T> void onDelete(T entity, Class<T> aClass) {
         CompletableFuture.runAsync(() -> getMapper(aClass).delete(entity), EXECUTOR_SERVICE);
-        return future;
     }
 
-    public <T> CompletableFuture<Boolean> onUpdate(T entity, Class<T> aClass) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+    /**
+     * Updates an entity in the database asynchronously.
+     *
+     * @param entity The entity we want to update in the database.
+     * @param aClass The class of the entity.
+     * @param <T> The specified type of the entity.
+     */
+    public <T> void onUpdate(T entity, Class<T> aClass) {
         CompletableFuture.runAsync(() -> getMapper(aClass).save(entity), EXECUTOR_SERVICE);
-        return future;
     }
 
+    /**
+     * Gets an object from the database asynchronously.
+     *
+     * @param key The primary key to get the entity.
+     * @param aClass The class of the entity.
+     * @return a Future with an entity of the type T
+     * @param <T> The specified type of the entity.
+     */
     public <T> CompletableFuture<T> getAsync(String key, Class<T> aClass) {
         CompletableFuture<T> future = new CompletableFuture<>();
 

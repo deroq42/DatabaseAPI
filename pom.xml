@@ -25,7 +25,7 @@
             <groupId>org.apache.cassandra</groupId>
             <artifactId>cassandra-all</artifactId>
             <version>4.0.3</version>
-            <scope>compile</scope>
+            <type>pom</type>
         </dependency>
 
         <dependency>

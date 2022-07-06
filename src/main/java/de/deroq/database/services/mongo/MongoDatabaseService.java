@@ -27,8 +27,13 @@ public class MongoDatabaseService extends DatabaseService {
 
     @Override
     public void connect() {
+        //URL of the mongo connection.
         ConnectionString connectionString = new ConnectionString("mongodb://" + host + ":" + port);
-        CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
+        CodecRegistry pojoCodecRegistry = fromProviders(
+                PojoCodecProvider.builder()
+                        .automatic(true)
+                        .build());
+
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
         MongoClientSettings clientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -41,7 +46,7 @@ public class MongoDatabaseService extends DatabaseService {
 
     @Override
     public void disconnect() {
-        if(mongoClient != null) {
+        if (mongoClient != null) {
             mongoClient.close();
         }
     }

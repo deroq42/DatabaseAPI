@@ -23,11 +23,13 @@ public class CassandraDatabaseService extends DatabaseService {
 
     @Override
     public void connect() {
+        /* Creates a connection pool with the following options. */
         PoolingOptions poolingOptions = new PoolingOptions()
                 .setConnectionsPerHost(HostDistance.LOCAL, 4, 10)
                 .setConnectionsPerHost(HostDistance.REMOTE, 2, 4)
                 .setHeartbeatIntervalSeconds(60);
 
+        /* Creates a cluster with the above set pooling options. */
         this.cluster = Cluster.builder()
                 .addContactPoint(host)
                 .withPoolingOptions(poolingOptions)
