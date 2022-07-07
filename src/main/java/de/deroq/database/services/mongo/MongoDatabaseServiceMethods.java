@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MongoDatabaseServiceMethods extends MongoDatabaseService {
+public class MongoDatabaseServiceMethods {
 
     protected final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 

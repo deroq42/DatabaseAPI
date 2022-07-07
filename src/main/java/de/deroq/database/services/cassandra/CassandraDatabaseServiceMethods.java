@@ -4,9 +4,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
+public class CassandraDatabaseServiceMethods {
 
+    private final CassandraDatabaseService databaseService;
     protected final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+
+    public CassandraDatabaseServiceMethods(CassandraDatabaseService databaseService) {
+        this.databaseService = databaseService;
+    }
 
     /**
      * Creates a table in the database asynchronously.
@@ -16,7 +21,7 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
      * @param columns The columns of the table to insert entities.
      */
     public void createTable(String keyspace, String name, String columns) {
-        CompletableFuture.runAsync(() -> session.executeAsync("CREATE TABLE IF NOT EXISTS " + keyspace + "." + name + "(" + columns + ");"), EXECUTOR_SERVICE);
+        CompletableFuture.runAsync(() -> databaseService.getSession().executeAsync("CREATE TABLE IF NOT EXISTS " + keyspace + "." + name + "(" + columns + ");"), EXECUTOR_SERVICE);
     }
 
     /**
@@ -27,7 +32,7 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
      * @param <T> The specified type of the entity.
      */
     public <T> void onInsert(T entity, Class<T> aClass) {
-        CompletableFuture.runAsync(() -> getMapper(aClass).save(entity), EXECUTOR_SERVICE);
+        CompletableFuture.runAsync(() -> databaseService.getMapper(aClass).save(entity), EXECUTOR_SERVICE);
     }
 
     /**
@@ -38,7 +43,7 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
      * @param <T> The specified type of the entity.
      */
     public <T> void onDelete(T entity, Class<T> aClass) {
-        CompletableFuture.runAsync(() -> getMapper(aClass).delete(entity), EXECUTOR_SERVICE);
+        CompletableFuture.runAsync(() -> databaseService.getMapper(aClass).delete(entity), EXECUTOR_SERVICE);
     }
 
     /**
@@ -49,7 +54,7 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
      * @param <T> The specified type of the entity.
      */
     public <T> void onUpdate(T entity, Class<T> aClass) {
-        CompletableFuture.runAsync(() -> getMapper(aClass).save(entity), EXECUTOR_SERVICE);
+        CompletableFuture.runAsync(() -> databaseService.getMapper(aClass).save(entity), EXECUTOR_SERVICE);
     }
 
     /**
@@ -64,7 +69,7 @@ public class CassandraDatabaseServiceMethods extends CassandraDatabaseService {
         CompletableFuture<T> future = new CompletableFuture<>();
 
         CompletableFuture.runAsync(() -> {
-            T entity = getMapper(aClass).get(key);
+            T entity = databaseService.getMapper(aClass).get(key);
             future.complete(entity);
         }, EXECUTOR_SERVICE);
 

@@ -20,14 +20,14 @@ public class MongoDatabaseService extends DatabaseService {
     protected MongoClient mongoClient;
     protected MongoDatabase mongoDatabase;
 
-    public MongoDatabaseService() {
-        super(DatabaseServiceType.MONGO);
+    public MongoDatabaseService(String host, String username, String database, String password, int port) {
+        super(DatabaseServiceType.MONGO, host, username, database, password, port);
         this.databaseServiceMethods = new MongoDatabaseServiceMethods();
     }
 
     @Override
     public void connect() {
-        //URL of the mongo connection.
+        /* URL of the mongo connection. */
         ConnectionString connectionString = new ConnectionString("mongodb://" + host + ":" + port);
         CodecRegistry pojoCodecRegistry = fromProviders(
                 PojoCodecProvider.builder()

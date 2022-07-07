@@ -9,16 +9,18 @@ import com.datastax.driver.mapping.MappingManager;
 import de.deroq.database.models.DatabaseService;
 import de.deroq.database.models.DatabaseServiceType;
 
+import java.util.List;
+
 public class CassandraDatabaseService extends DatabaseService {
 
     public CassandraDatabaseServiceMethods databaseServiceMethods;
-    protected Cluster cluster;
-    protected Session session;
-    protected MappingManager mappingManager;
+    private Cluster cluster;
+    private Session session;
+    private MappingManager mappingManager;
 
-    public CassandraDatabaseService() {
-        super(DatabaseServiceType.CASSANDRA);
-        this.databaseServiceMethods = new CassandraDatabaseServiceMethods();
+    public CassandraDatabaseService(String host, String username, String database, String password, int port, String keySpace, List<Class<?>> mappers) {
+        super(DatabaseServiceType.CASSANDRA, host, username, database, password, port, keySpace, mappers);
+        this.databaseServiceMethods = new CassandraDatabaseServiceMethods(this);
     }
 
     @Override
